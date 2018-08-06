@@ -5,7 +5,27 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/css/bootstrap.min.css')
   body
-    block content
+    nav.navbar.fixed-top.navbar-expand-lg.navbar-dark.bg-dark
+      a.navbar-brand(href='/') #{title}
+      button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar-body' aria-controls='navbar-body' aria-expanded=false.toString() arai-label='Toggle navigation')
+        span.navbar-toggler-icon
+      div.collapse.navbar-collapse#navbar-body
+        ul.navbar-nav.mr-auto
+          li.nav-item
+            if title == 'Home'
+              a.nav-link.active(href='/') Home
+            else
+              a.nav-link(href='/') Home
+          li.nav-item
+            if title == Users
+              a.nav-link.active(href='/users') Users
+            else
+              a.nav-link(href='/users') Users
+        ul.navbar-nav.justify-content-end
+          li.nav-item
+            a.nav-link(href=signInUrl) Sign In
+    main.container-fluid(role='main')
+      block content
     script(src='/js/jquery.min.js')
-    script(src='/js/bootstrap.min.js')
     script(src='/js/popper.min.js')
+    script(src='/js/bootstrap.min.js')

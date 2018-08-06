@@ -1,9 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var authHelper = require('../helpers/auth')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  let parms = { title: 'Home' };
+  parms.signInUrl = authHelper.getAuthUrl();
+  parms.debug = parms.signInUrl;
+  res.render('index', parms);
 });
 
 module.exports = router;

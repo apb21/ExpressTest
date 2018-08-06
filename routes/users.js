@@ -3,7 +3,10 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  res.render('index',{ title: 'Users', active: {'home':false,'users':true} });
 });
+router.get('/:user_id',function(req,res){
+  res.send(req.params['user_id']);
+})
 
 module.exports = router;
