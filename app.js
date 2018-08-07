@@ -7,8 +7,8 @@ var dotenv = require('dotenv').config();
 
 //Setup Routes Here
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var authRouter = require('./routes/authorize');
+var driveRouter = require('./routes/drive');
 
 var app = express();
 
@@ -23,14 +23,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/authorize', authRouter);
+app.use('/drive', driveRouter);
 
 //routes to load static js and css from node_modules
 app.use('/css',express.static(path.join(__dirname,'/node_modules/bootstrap/dist/css')));
 app.use('/js', express.static(path.join(__dirname,'/node_modules/jquery/dist')));
 app.use('/js', express.static(path.join(__dirname,'/node_modules/bootstrap/dist/js')));
-app.use('/js', express.static(path.join(__dirname,'/node_modules/popper.js/dist/esm')));
+app.use('/js', express.static(path.join(__dirname,'/node_modules/popper.js/dist/umd')));
 
 
 // catch 404 and forward to error handler

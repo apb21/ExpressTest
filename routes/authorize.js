@@ -12,16 +12,25 @@ router.get('/', async function(req, res, next) {
     let token;
 
     try {
-      token = await authHelper.getTokenFromCode(code);
+      token = await authHelper.getTokenFromCode(code, res);
     } catch (error) {
       res.render('error', { title: 'Error', message: 'Error exchanging code for token', error: error });
     }
 
-    res.render('index', { title: 'Home', debug: `Access token: ${token}` });
+    // Redirect to home
+    res.redirect('/');
   } else {
     // Otherwise complain
     res.render('error', { title: 'Error', message: 'Authorization error', error: { status: 'Missing code parameter' } });
   }
+});
+
+/* GET /authorize/signout */
+router.get('/signout', function(req, res, next) {
+  authHelper.clearCookies(res);
+
+  // Redirect to home
+  res.redirect('/');
 });
 
 module.exports = router;
