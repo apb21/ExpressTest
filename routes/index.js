@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var authHelper = require('../helpers/auth');
+var graph = require('@microsoft/microsoft-graph-client');
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
@@ -11,12 +12,29 @@ router.get('/', async function(req, res, next) {
 
   if (accessToken && userName) {
     parms.user = userName;
-    parms.debug = `User: ${userName}\nAccess Token: ${accessToken}`;
+
+    // Initialize Graph client
+    const client = graph.Client.init({
+      authProvider: (done) => {
+        done(null, accessToken);
+      }
+    });
+
+    try{
+      const result = await client
+      .api('me/photos/48x48/$value')
+      .get();
+      console.log(result);
+      parms.photoBlob = result;
+    }
+    catch (err){
+      parms.error = { status: `${err.code}: ${err.message}` };
+      res.render('error',parms);
+    }
+
   } else {
     parms.signInUrl = authHelper.getAuthUrl();
-    parms.debug = parms.signInUrl;
   }
-
   res.render('index', parms);
 });
 

@@ -22,7 +22,7 @@ router.get('/', async function(req, res, next){
 
     try{
       const result = await client
-      .api('me/drive')
+      .api('me/drive/special/approot/children')
       .get();
       //console.log(result);
       parms.drive = result;

@@ -5,5 +5,15 @@ block content
     h1= title
     if user
       p Welcome #{user}
-    else
-      a.btn.btn-primary.btn-large(href=signInUrl) Login
+  div.card
+    div.card-header
+      if user
+        span #{user}
+      else
+        span Welcome
+    div.card-body
+      if user
+
+      else
+        a.btn.btn-primary.btn-large(href=signInUrl) Sign In
+    div.card-footer

@@ -1,0 +1,8 @@
+extends layout
+block content
+  .container
+    form(action='/form' method='POST')
+      div.form-group
+        label(for='AuditNameInput') Audit Name
+        input.form-control#AuditNameInput(type='text' placeholder='Name of Audit' name='AuditName')
+      button.btn.btn-primary(type='submit') Submit

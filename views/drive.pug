@@ -1,14 +1,7 @@
 extends layout
 
 block content
-  h2 #{title}
-  table.table
-    thead.thead-dark
-      th(scope='col') Total
-      th(scope='col') Remaining
-      th(scope='col') Deleted
-    tbody
-      tr
-        td #{drive.quota.total}
-        td #{drive.quota.remaining}
-        td #{drive.quota.deleted}
+    ul
+      each driveItem in drive.value
+        li
+          a(href= driveItem.webUrl) #{driveItem.name}

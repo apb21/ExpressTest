@@ -6,7 +6,7 @@ html
     link(rel='stylesheet', href='/css/bootstrap.min.css')
   body
     nav.navbar.fixed-top.navbar-expand-lg.navbar-dark.bg-dark
-      a.navbar-brand(href='/') #{title}
+      a.navbar-brand(href='/') ExpressTest
       button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar-body' aria-controls='navbar-body' aria-expanded=false.toString() arai-label='Toggle navigation')
         span.navbar-toggler-icon
       div.collapse.navbar-collapse#navbar-body
@@ -16,11 +16,17 @@ html
               a.nav-link.active(href='/') Home
             else
               a.nav-link(href='/') Home
-          li.nav-item
-            if title == 'Drive'
-              a.nav-link.active(href='/drive') Drive
-            else
-              a.nav-link(href='/drive') Drive
+          if user
+            li.nav-item
+              if title == 'Drive'
+                a.nav-link.active(href='/drive') Drive
+              else
+                a.nav-link(href='/drive') Drive
+            li.nav-item
+              if title == 'Form'
+                a.nav-link.active(href='/form') Form
+              else
+                a.nav-link(href='form') Form
         ul.navbar-nav.justify-content-end
           if user
             li.nav-item.dropdown

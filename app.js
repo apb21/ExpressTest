@@ -7,8 +7,9 @@ var dotenv = require('dotenv').config();
 
 //Setup Routes Here
 var indexRouter = require('./routes/index');
-var authRouter = require('./routes/authorize');
+var authRouter  = require('./routes/authorize');
 var driveRouter = require('./routes/drive');
+var formRouter  = require('./routes/form');
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/authorize', authRouter);
 app.use('/drive', driveRouter);
+app.use('/form', formRouter);
 
 //routes to load static js and css from node_modules
 app.use('/css',express.static(path.join(__dirname,'/node_modules/bootstrap/dist/css')));
