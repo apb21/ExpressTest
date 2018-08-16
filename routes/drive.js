@@ -26,6 +26,7 @@ router.get('/', async function(req, res, next){
       .get();
       //console.log(result);
       parms.drive = result;
+      parms.ItemCount = result.value.length;
     }
     catch (err){
       parms.error = { status: `${err.code}: ${err.message}` };

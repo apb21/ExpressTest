@@ -24,17 +24,19 @@ function getAuthUrl() {
 exports.getAuthUrl = getAuthUrl;
 
 async function getTokenFromCode(auth_code, res) {
-  let result = await oauth2.authorizationCode.getToken({
+  const tokenConfig = {
     code: auth_code,
     redirect_uri: process.env.REDIRECT_URI,
     scope: process.env.APP_SCOPES
-  });
-
-  const token = oauth2.accessToken.create(result);
-
-  saveValuesToCookie(token, res);
-
-  return token.token.access_token;
+  };
+  try {
+    let result = await oauth2.authorizationCode.getToken(tokenConfig);
+    const token = oauth2.accessToken.create(result);
+    saveValuesToCookie(token, res);
+    return token.token.access_token;
+  } catch (error){
+    console.log('Access Token Error:',error.message);
+  }
 };
 
 exports.getTokenFromCode = getTokenFromCode;

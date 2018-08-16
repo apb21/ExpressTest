@@ -1,7 +1,9 @@
 extends layout
 
 block content
-    ul
-      each driveItem in drive.value
-        li
-          a(href= driveItem.webUrl) #{driveItem.name}
+  .jumbotron
+    h3 #{ItemCount} items found
+  ul
+    each driveItem in drive.value
+      li
+        a(href= driveItem.webUrl) #{driveItem.name}
