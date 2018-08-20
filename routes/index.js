@@ -24,10 +24,8 @@ router.get('/', async function(req, res, next) {
       const result = await client
       .api('me/photos/48x48/$value')
       .get();
-      console.log(result);
       parms.photoBlob = result;
-    }
-    catch (err){
+    } catch (err){
       parms.error = { status: `${err.code}: ${err.message}` };
       res.render('error',parms);
     }

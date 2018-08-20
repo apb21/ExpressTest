@@ -36,6 +36,9 @@ async function getTokenFromCode(auth_code, res) {
     return token.token.access_token;
   } catch (error){
     console.log('Access Token Error:',error.message);
+    let parms;
+    parms.error = { status: `${err.code}: ${err.message}` };
+    res.render('error', parms);
   }
 };
 

@@ -5,6 +5,11 @@ block content
     h1= title
     if user
       p Welcome #{user}
+  if success
+    div.alert.alert-success.alert-dismissable.fade.show(role=alert) Save Successful
+      button.close(type='button' data-dismiss='alert')
+        span &times;
+
   div.card
     div.card-header
       if user

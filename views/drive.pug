@@ -1,9 +1,29 @@
 extends layout
 
 block content
-  .jumbotron
-    h3 #{ItemCount} items found
-  ul
-    each driveItem in drive.value
-      li
-        a(href= driveItem.webUrl) #{driveItem.name}
+  if ItemCount == 0
+    .jumbotron.bg-danger.text-white
+      h3 #{ItemCount} files found
+    div.card
+      div.card-header.bg-danger.text-white
+        h4 Action Required
+      div.card-body
+        h5.card-title.text-danger No Spreadsheet Found
+        p Please create an Excel workbook for the app to use in your OneDrive/Apps/#{app_name} folder
+        p The file strong(must) be called #{app_name}.xlsx
+  else
+    .jumbotron
+      h3 #{ItemCount} files found
+    div.list-group
+      each driveItem in drive.value
+        if driveItem.name == "AuditActions.xlsx"
+          a.list-group-item.list-group-item-action.bg-success.text-white(href= driveItem.webUrl target='_blank') #{driveItem.name}
+            if resultlistcount > 0
+              h5.d-inline-flex
+                span.badge.badge-success  #{resultlistcount} Items
+          if resultlistcount > 0
+            div.list-group
+              each listItem in resultlist.value
+                a.list-group-item.list-group-item-action(href='/form/'+listItem.index) #{listItem.values}
+        else
+          a.list-group-item.list-group-item-action.bg-primary.text-white(href= driveItem.webUrl target='_blank') #{driveItem.name}
