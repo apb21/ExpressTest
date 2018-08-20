@@ -1,8 +1,13 @@
 const jwt = require('jsonwebtoken');
 
-var HttpProxyAgent = require('http-proxy-agent');
 var proxy = process.env.HTTP_PROXY;
-var agent = new HttpProxyAgent(proxy);
+if (proxy != null){
+  var HttpProxyAgent = require('http-proxy-agent');
+  var agent = new HttpProxyAgent(proxy);
+} else{
+  var agent = null;
+}
+
 
 const credentials = {
   client: {
