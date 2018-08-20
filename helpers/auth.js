@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken');
 
+var HttpProxyAgent = require('http-proxy-agent');
+var proxy = process.env.HTTP_PROXY;
+var agent = new HttpProxyAgent(proxy);
+
 const credentials = {
   client: {
     id: process.env.APP_ID,
@@ -9,6 +13,9 @@ const credentials = {
     tokenHost: 'https://login.microsoftonline.com',
     authorizePath: 'common/oauth2/v2.0/authorize',
     tokenPath: 'common/oauth2/v2.0/token'
+  },
+  http:{
+    agent: agent
   }
 };
 const oauth2 = require('simple-oauth2').create(credentials);
@@ -37,7 +44,7 @@ async function getTokenFromCode(auth_code, res) {
   } catch (error){
     console.log('Access Token Error:',error.message);
     let parms;
-    parms.error = { status: `${err.code}: ${err.message}` };
+    parms.error = { status: `${error.code}: ${error.message}` };
     res.render('error', parms);
   }
 };
