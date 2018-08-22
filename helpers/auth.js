@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 
-var proxy = process.env.HTTP_PROXY;
-if (proxy != null){
+var proxy = process.env.HTTP_PROXY || process.env.http_proxy || null;
+if (proxy !== null){
+  console.log("Using Proxy %j", proxy);
   var HttpProxyAgent = require('http-proxy-agent');
-  var agent = new HttpProxyAgent(proxy);
+  var newAgent = new HttpProxyAgent(proxy);
 } else{
-  var agent = null;
+  var newAgent = null;
 }
 
 
@@ -20,7 +21,8 @@ const credentials = {
     tokenPath: 'common/oauth2/v2.0/token'
   },
   http:{
-    agent: agent
+    agent: newAgent,
+    redirects: 20
   }
 };
 const oauth2 = require('simple-oauth2').create(credentials);
@@ -42,14 +44,16 @@ async function getTokenFromCode(auth_code, res) {
     scope: process.env.APP_SCOPES
   };
   try {
+    console.log("can get here");
     let result = await oauth2.authorizationCode.getToken(tokenConfig);
+    console.log("doesn't get here?");
     const token = oauth2.accessToken.create(result);
     saveValuesToCookie(token, res);
     return token.token.access_token;
-  } catch (error){
-    console.log('Access Token Error:',error.message);
-    let parms;
-    parms.error = { status: `${error.code}: ${error.message}` };
+  } catch (err){
+    console.log('Access Token Error:',err.message);
+    let parms = {};
+    parms.error = { status: `${err.code}: ${err.message}` };
     res.render('error', parms);
   }
 };

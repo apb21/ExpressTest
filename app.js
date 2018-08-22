@@ -5,6 +5,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var dotenv = require('dotenv').config();
 
+if (process.env.NODE_ENV !== 'production'){
+  console.log("using longjohn");
+  require('longjohn');
+}
+
 //Setup Routes Here
 var indexRouter = require('./routes/index');
 var authRouter  = require('./routes/authorize');
