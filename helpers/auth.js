@@ -21,8 +21,7 @@ const credentials = {
     tokenPath: 'common/oauth2/v2.0/token'
   },
   http:{
-    agent: newAgent,
-    redirects: 20
+    agent: newAgent
   }
 };
 const oauth2 = require('simple-oauth2').create(credentials);
@@ -44,9 +43,7 @@ async function getTokenFromCode(auth_code, res) {
     scope: process.env.APP_SCOPES
   };
   try {
-    console.log("can get here");
     let result = await oauth2.authorizationCode.getToken(tokenConfig);
-    console.log("doesn't get here?");
     const token = oauth2.accessToken.create(result);
     saveValuesToCookie(token, res);
     return token.token.access_token;

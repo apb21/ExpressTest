@@ -4,7 +4,7 @@ var authHelper = require('../helpers/auth');
 var graph = require('@microsoft/microsoft-graph-client');
 
 router.get('/', async function(req,res,next){
-  let parms = { title : 'Form' };
+  let parms = { title : 'Form', app_name: process.env.APP_NAME };
   parms.data = ["","","","","","","","","",""];
   parms.action = '/form';
 
@@ -116,7 +116,7 @@ router.post('/', async function(req,res,next){
     res.redirect('/');
   };
 
-  res.redirect('/');
+  res.redirect('/drive');
 });
 
 router.post('/:record', async function(req,res,next){
@@ -173,7 +173,7 @@ router.post('/:record', async function(req,res,next){
     res.redirect('/');
   };
 
-  res.redirect('/');
+  res.redirect('/drive');
 });
 
 module.exports = router;

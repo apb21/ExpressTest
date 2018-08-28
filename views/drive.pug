@@ -22,8 +22,9 @@ block content
               h5.d-inline-flex
                 span.badge.badge-success  #{resultlistcount} Items
           if resultlistcount > 0
-            div.list-group
-              each listItem in resultlist.value
-                a.list-group-item.list-group-item-action(href='/form/'+listItem.index) #{listItem.values}
+            .container
+              div.list-group
+                each listItem in resultlist.value
+                  a.list-group-item.list-group-item-action(href='/form/'+listItem.index) #{listItem.values[0]}
         else
           a.list-group-item.list-group-item-action.bg-primary.text-white(href= driveItem.webUrl target='_blank') #{driveItem.name}

@@ -5,6 +5,14 @@
   "scripts": {
     "start": "node ./bin/www"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apb21/ExpressTest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/apb21/ExpressTest/issues"
+  },
+  "homepage": "https://github.com/apb21/ExpressTest",
   "dependencies": {
     "@microsoft/microsoft-graph-client": "^1.1.0",
     "bootstrap": "^4.1.3",

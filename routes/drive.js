@@ -5,14 +5,13 @@ var graph = require('@microsoft/microsoft-graph-client');
 
 /* GET users OneDrive */
 router.get('/', async function(req, res, next){
-  let parms = { title:'Drive' };
+  let parms = { title:'Drive', app_name: process.env.APP_NAME};
 
   const accessToken = await authHelper.getAccessToken(req.cookies, res);
   const userName = req.cookies.graph_user_name;
 
   if (accessToken && userName){
     parms.user = userName;
-    parms.app_name = process.env.APP_NAME;
 
     // Initialize Graph client
     const client = graph.Client.init({
