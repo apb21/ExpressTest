@@ -1,11 +1,12 @@
-var express = require('express');
-var router = express.Router();
-var authHelper = require('../helpers/auth');
-var graph = require('@microsoft/microsoft-graph-client');
+const express = require('express');
 
-router.get('/', async function(req,res,next){
-  let parms = { title : 'Form', app_name: process.env.APP_NAME };
-  parms.data = ["","","","","","","","","",""];
+const router = express.Router();
+const authHelper = require('../helpers/auth');
+const graph = require('@microsoft/microsoft-graph-client');
+
+router.get('/', async (req, res, next) => {
+  const parms = { title: 'Form', app_name: process.env.APP_NAME };
+  parms.data = ['', '', '', '', '', '', '', '', '', ''];
   parms.action = '/form';
 
   const accessToken = await authHelper.getAccessToken(req.cookies, res);
@@ -13,16 +14,16 @@ router.get('/', async function(req,res,next){
 
   if (accessToken && userName) {
     parms.user = userName;
-    res.render('form',parms);
+    res.render('form', parms);
   } else {
     res.redirect('/');
   }
 });
 
-router.get('/:record', async function(req,res,next){
-  let parms = { title : 'Form' };
+router.get('/:record', async (req, res, next) => {
+  const parms = { title: 'Form' };
   Object.assign(parms, req.params, parms);
-  parms.action = '/form/'+parms.record;
+  parms.action = `/form/${parms.record}`;
 
   const accessToken = await authHelper.getAccessToken(req.cookies, res);
   const userName = req.cookies.graph_user_name;
@@ -34,39 +35,38 @@ router.get('/:record', async function(req,res,next){
     const client = graph.Client.init({
       authProvider: (done) => {
         done(null, accessToken);
-      }
+      },
     });
 
     // TODO: Load data from Excel workbook on OneDrive for requested record (if it exists, otherwise load blank)
-    try{
-      const pathTemplate = 'me/drive/root:/Apps/APP_NAME/APP_NAME.xlsx:/workbook/tables(%271%27)/rows/itemAt(index=ROW)';//?$top=1&$skip=ROW';
-      var path = pathTemplate.replace("APP_NAME",process.env.APP_NAME);
-      var pathFinder = pathTemplate.search('APP_NAME');
-      while(pathFinder > -1){
-          var path = path.replace("APP_NAME",process.env.APP_NAME);
-          var pathFinder = path.search('APP_NAME');
+    try {
+      const pathTemplate = 'me/drive/root:/Apps/APP_NAME/APP_NAME.xlsx:/workbook/tables(%271%27)/rows/itemAt(index=ROW)';// ?$top=1&$skip=ROW';
+      let path = pathTemplate.replace('APP_NAME', process.env.APP_NAME);
+      let pathFinder = pathTemplate.search('APP_NAME');
+      while (pathFinder > -1) {
+        path = path.replace('APP_NAME', process.env.APP_NAME);
+        pathFinder = path.search('APP_NAME');
       }
-      var path = path.replace('ROW',parms.record);
-      //console.log(path);
+      path = path.replace('ROW', parms.record);
+      // console.log(path);
       const result = await client
         .api(path)
         .get();
         // TODO: Fill In Form
-        parms.data = result.values[0];
-    } catch(err){
+      parms.data = result.values[0];
+    } catch (err) {
       parms.error = { status: `${err.code}: ${err.message}` };
-      res.render('error',parms);
+      res.render('error', parms);
     }
-    //console.log(parms);
-    res.render('form',parms);
-  }
-  else{
+    // console.log(parms);
+    res.render('form', parms);
+  } else {
     res.redirect('/');
-  };
+  }
 });
 
-router.post('/', async function(req,res,next){
-  let parms = { 'title' : 'Form'};
+router.post('/', async (req, res, next) => {
+  const parms = { title: 'Form' };
   const accessToken = await authHelper.getAccessToken(req.cookies, res);
   const userName = req.cookies.graph_user_name;
 
@@ -77,50 +77,46 @@ router.post('/', async function(req,res,next){
     const client = graph.Client.init({
       authProvider: (done) => {
         done(null, accessToken);
-      }
+      },
     });
-    let valuesArray = [];
-    for (var i in req.body){
-      valuesArray.push("'"+req.body[i].toString());
+    const valuesArray = [];
+    for (const i in req.body) {
+      valuesArray.push(`'${req.body[i].toString()}`);
     }
 
     const config = {
-      'index' : null,
-      'values': [valuesArray]
+      index: null,
+      values: [valuesArray],
     };
-    //console.log(config);
-    try{
+    // console.log(config);
+    try {
       const pathTemplate = 'me/drive/root:/Apps/APP_NAME/APP_NAME.xlsx:/workbook/tables(%271%27)/rows/add';
-      var path = pathTemplate.replace("APP_NAME",process.env.APP_NAME);
-      var pathFinder = pathTemplate.search('APP_NAME');
-      while(pathFinder > -1){
-          var path = path.replace("APP_NAME",process.env.APP_NAME);
-          var pathFinder = path.search('APP_NAME');
+      let path = pathTemplate.replace('APP_NAME', process.env.APP_NAME);
+      let pathFinder = pathTemplate.search('APP_NAME');
+      while (pathFinder > -1) {
+        path = path.replace('APP_NAME', process.env.APP_NAME);
+        pathFinder = path.search('APP_NAME');
       }
       const result = await client
         .api(path)
         .post(config)
-        .then((res) =>{
-            // TODO: Respond with outcome to user
-          })
-        .catch((err) =>{
+        .catch((err) => {
           parms.error = { status: `${err.code}: ${err.message}` };
-          res.render('error',parms);
+          res.render('error', parms);
         });
-
-    } catch(err){
+    } catch (err) {
       parms.error = { status: `${err.code}: ${err.message}` };
-      res.render('error',parms);
+      res.render('error', parms);
     }
-  }else{
+  } else {
     res.redirect('/');
-  };
+  }
 
   res.redirect('/drive');
 });
 
-router.post('/:record', async function(req,res,next){
-  let parms = { 'title' : 'Form'};
+router.post('/:record', async (req, res, next) => {
+  const parms = { title: 'Form' };
   Object.assign(parms, req.params, parms);
   const accessToken = await authHelper.getAccessToken(req.cookies, res);
   const userName = req.cookies.graph_user_name;
@@ -132,46 +128,41 @@ router.post('/:record', async function(req,res,next){
     const client = graph.Client.init({
       authProvider: (done) => {
         done(null, accessToken);
-      }
+      },
     });
 
-    let valuesArray = [];
+    const valuesArray = [];
 
-    for (var i in req.body){
-      valuesArray.push("'"+req.body[i].toString());
+    for (const i in req.body) {
+      valuesArray.push(`'${req.body[i].toString()}`);
     }
 
     const config = {
-      'values': [valuesArray]
+      values: [valuesArray],
     };
-    //console.log(config);
-    try{
+    try {
       const pathTemplate = 'me/drive/root:/Apps/APP_NAME/APP_NAME.xlsx:/workbook/tables(%271%27)/rows/$/itemAt(index=ROW)';
-      var path = pathTemplate.replace("APP_NAME",process.env.APP_NAME);
-      var pathFinder = pathTemplate.search('APP_NAME');
-      while(pathFinder > -1){
-          var path = path.replace("APP_NAME",process.env.APP_NAME);
-          var pathFinder = path.search('APP_NAME');
+      let path = pathTemplate.replace('APP_NAME', process.env.APP_NAME);
+      let pathFinder = pathTemplate.search('APP_NAME');
+      while (pathFinder > -1) {
+        path = path.replace('APP_NAME', process.env.APP_NAME);
+        pathFinder = path.search('APP_NAME');
       }
-      var path = path.replace("ROW",parms.record);
-      const result = await client
+      path = path.replace('ROW', parms.record);
+      await client
         .api(path)
         .patch(config)
-        .then((res) =>{
-            // TODO: Respond with outcome to user?
-          })
-        .catch((err) =>{
+        .catch((err) => {
           parms.error = { status: `${err.code}: ${err.message}` };
-          res.render('error',parms);
+          res.render('error', parms);
         });
-
-    } catch(err){
+    } catch (err) {
       parms.error = { status: `${err.code}: ${err.message}` };
-      res.render('error',parms);
+      res.render('error', parms);
     }
-  }else{
+  } else {
     res.redirect('/');
-  };
+  }
 
   res.redirect('/drive');
 });

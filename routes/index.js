@@ -1,11 +1,12 @@
-var express = require('express');
-var router = express.Router();
-var authHelper = require('../helpers/auth');
-var graph = require('@microsoft/microsoft-graph-client');
+const express = require('express');
+
+const router = express.Router();
+const authHelper = require('../helpers/auth');
+const graph = require('@microsoft/microsoft-graph-client');
 
 /* GET home page. */
-router.get('/', async function(req, res, next) {
-  let parms = { title: 'Home', app_name:process.env.APP_NAME };
+router.get('/', async (req, res, next) => {
+  const parms = { title: 'Home', app_name: process.env.APP_NAME };
 
   const accessToken = await authHelper.getAccessToken(req.cookies, res);
   const userName = req.cookies.graph_user_name;
@@ -17,19 +18,18 @@ router.get('/', async function(req, res, next) {
     const client = graph.Client.init({
       authProvider: (done) => {
         done(null, accessToken);
-      }
+      },
     });
 
-    try{
+    try {
       const result = await client
-      .api('me/photos/48x48/$value')
-      .get();
+        .api('me/photos/48x48/$value')
+        .get();
       parms.photoBlob = result;
-    } catch (err){
+    } catch (err) {
       parms.error = { status: `${err.code}: ${err.message}` };
-      res.render('error',parms);
+      res.render('error', parms);
     }
-
   } else {
     parms.signInUrl = authHelper.getAuthUrl();
   }

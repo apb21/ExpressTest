@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "lint": "node ./node_modules/eslint/bin/eslint.js ./",
+    "lint-fix": "node ./node_modules/eslint/bin/eslint.js ./ --fix"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,13 @@
     "simple-oauth2": "^2.2.1"
   },
   "devDependencies": {
+    "eslint": "^5.5.0",
+    "eslint-config-equimper": "^2.2.2",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-standard": "^4.0.0",
     "longjohn": "^0.2.12"
   }
 }
